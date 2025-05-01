@@ -10,7 +10,7 @@ public class GuicePagesModule extends AbstractModule {
 
   private final WebDriver driver;
 
-  public GuicePagesModule (WebDriver driver) {
+  public GuicePagesModule(WebDriver driver) {
     this.driver = driver;
   }
 
