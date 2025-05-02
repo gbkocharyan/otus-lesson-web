@@ -13,7 +13,7 @@ public abstract class AbsBasePage extends AbsCommon {
   private String baseUrl = System.getProperty("baseUrl");
 
   private String getPath() {
-    return annotationUtils.getAnnotation(Path.class).value();
+    return annotationUtils.getAnnotationInstance(this.getClass(), Path.class).value();
   }
 
   public String getUrl() {

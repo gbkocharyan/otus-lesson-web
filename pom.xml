@@ -92,6 +92,7 @@
                     <systemPropertyVariables>
                         <browser>chrome</browser>
                         <baseUrl>https://otus.ru</baseUrl>
+                        <timeout>10</timeout>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
