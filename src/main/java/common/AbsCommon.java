@@ -1,6 +1,7 @@
 package common;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import utils.ActionUtils;
 import utils.AnnotationUtils;
@@ -19,6 +20,20 @@ public abstract class AbsCommon {
     this.actionUtils = new ActionUtils(driver);
     this.waiters = new Waiters(driver);
     PageFactory.initElements(driver, this);
+  }
+
+  protected void click(WebElement element) {
+    waiters.waitForElementToBeClickable(element);
+    element.click();
+  }
+
+  protected String getText(WebElement element) {
+    waiters.waitForElementToBeVisible(element);
+    return element.getText();
+  }
+
+  protected String getElementAttribute(WebElement element) {
+    return element.getDomAttribute("value");
   }
 
 }

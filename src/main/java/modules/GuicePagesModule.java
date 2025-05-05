@@ -4,6 +4,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import org.openqa.selenium.WebDriver;
+import pages.CoursePage;
+import pages.CoursesPage;
 import pages.MainPage;
 
 public class GuicePagesModule extends AbstractModule {
@@ -25,4 +27,15 @@ public class GuicePagesModule extends AbstractModule {
     return new MainPage(driver);
   }
 
+  @Provides
+  @Singleton
+  public CoursesPage getCoursesPage() {
+    return new CoursesPage(driver);
+  }
+
+  @Provides
+  @Singleton
+  public CoursePage getCoursePage() {
+    return new CoursePage(driver);
+  }
 }
