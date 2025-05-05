@@ -50,6 +50,7 @@ public class CoursesPage extends AbsBasePage {
   }
 
   public List<WebElement> getEarliestCoursesDates() {
+    waiters.waitForElementToBeVisible(coursesDates.getFirst());
     Optional<LocalDate> earliestDateOpt = coursesDates.stream()
         .map(this::extractCourseDate)
         .reduce((date1, date2) -> date1.isBefore(date2) ? date1 : date2);
@@ -63,6 +64,7 @@ public class CoursesPage extends AbsBasePage {
   }
 
   public List<WebElement> getLatestCoursesDates() {
+    waiters.waitForElementToBeVisible(coursesDates.getFirst());
     Optional<LocalDate> latestDateOpt = coursesDates.stream()
         .map(this::extractCourseDate)
         .reduce(

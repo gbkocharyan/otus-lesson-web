@@ -9,7 +9,7 @@ import java.time.Duration;
 public class Waiters {
 
   private final WebDriverWait webDriverWait;
-  private static final int TIMEOUT = Integer.parseInt(System.getProperty("timeout", "10"));
+  private static final int TIMEOUT = Integer.parseInt(System.getProperty("timeout", "20"));
 
   public Waiters(WebDriver driver) {
     webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(TIMEOUT));

@@ -7,6 +7,7 @@ import components.HeaderComponent;
 import components.TrainingComponent;
 import extensions.UIExtension;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import pages.CoursePage;
@@ -33,7 +34,8 @@ public class Homework1Test {
   @Inject
   TrainingComponent trainingComponent;
 
-  @Test
+  @Test()
+  @DisplayName("Find a course by name in the course catalog page, click on the course tile and check that the correct course page is open")
   public void shouldOpenCorrectCoursePage() {
     coursesPage.open();
     String courseTitle = coursesPage.selectRandomCourseTitle();
@@ -43,6 +45,8 @@ public class Homework1Test {
   }
 
   @Test
+  @DisplayName("Find courses with earliest and latest start dates and check that the card of the earliest/latest course"
+      + " displays the correct course start date")
   public void findCoursesWithEarliestAndLatestStartDates() {
     coursesPage.open();
     coursesPage.getEarliestCoursesDates().forEach(courseDate ->
@@ -57,6 +61,7 @@ public class Homework1Test {
   }
 
   @Test
+  @DisplayName("Select a random category in Training menu and verify that the correct category is opened")
   public void selectRandomCategoryAndVerify() {
     mainPage.open();
     headerComponent.moveToTrainingField();
