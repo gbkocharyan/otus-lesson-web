@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.openqa.selenium.WebDriver;
+import pages.MainPage;
 
 public class UIExtension implements BeforeEachCallback, AfterEachCallback {
 
@@ -17,7 +18,8 @@ public class UIExtension implements BeforeEachCallback, AfterEachCallback {
   @Override
   public void afterEach(ExtensionContext context) {
     WebDriver driver = injector.getInstance(WebDriver.class);
-    if(driver != null) {
+    injector.getInstance(MainPage.class).open();
+    if (driver != null) {
       driver.quit();
     }
   }
@@ -26,6 +28,6 @@ public class UIExtension implements BeforeEachCallback, AfterEachCallback {
   public void beforeEach(ExtensionContext context) {
     WebDriver driver = new WebDriverFactory().create();
     injector = Guice.createInjector(new GuicePagesModule(driver), new GuiceComponentsModule(driver));
-    injector.injectMembers(context.getTestInstance().get());
+    context.getTestInstance().ifPresent(injector::injectMembers);
   }
 }

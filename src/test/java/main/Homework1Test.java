@@ -3,6 +3,8 @@ package main;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.inject.Inject;
+import components.HeaderComponent;
+import components.TrainingComponent;
 import extensions.UIExtension;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
@@ -25,12 +27,19 @@ public class Homework1Test {
   @Inject
   CoursePage coursePage;
 
+  @Inject
+  HeaderComponent headerComponent;
+
+  @Inject
+  TrainingComponent trainingComponent;
+
   @Test
   public void shouldOpenCorrectCoursePage() {
     coursesPage.open();
     String courseTitle = coursesPage.selectRandomCourseTitle();
     coursesPage.clickOnCourseByTitle(courseTitle);
-    assertTrue(coursePage.isCorrectCoursePageOpened(courseTitle), courseTitle + " course page will be opened");
+    assertTrue(coursePage.isCorrectCoursePageOpened(courseTitle),
+        courseTitle + " course page will be opened");
   }
 
   @Test
@@ -45,6 +54,15 @@ public class Homework1Test {
             .as("Latest courses dates are present in the page")
             .isTrue());
     softAssert.assertAll();
+  }
+
+  @Test
+  public void selectRandomCategoryAndVerify() {
+    mainPage.open();
+    headerComponent.moveToTrainingField();
+    String categoryName = trainingComponent.clickOnRandomCategoryAndGetName();
+    assertTrue(coursesPage.isCategorySelected(coursesPage.getSelectedCategoryByName(categoryName)),
+        categoryName + " category is selected");
   }
 
 }
