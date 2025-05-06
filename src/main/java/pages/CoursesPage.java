@@ -4,6 +4,7 @@ import annotations.Path;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -83,10 +84,22 @@ public class CoursesPage extends AbsBasePage {
     return LocalDate.parse(dateText, this.formatter);
   }
 
-  public boolean isCourseDateInPage(WebElement courseDate) {
+  public WebElement getCourseTitleByDate(WebElement targetCourseDate) {
+    WebElement parentPanel = coursePanels.stream()
+        .filter(panel -> panel.findElements(By.xpath(".//div[2]/div/div")).stream()
+            .anyMatch(courseDate -> courseDate.equals(targetCourseDate)))
+        .findFirst()
+        .orElseThrow(() -> new RuntimeException("No course panel contains the given date."));
+
+    return parentPanel.findElement(By.xpath(".//h6/div"));
+  }
+
+
+  public boolean isCourseDataInPage(WebElement courseDate, WebElement courseTitle) {
     Document doc = Jsoup.parse(Objects.requireNonNull(driver.getPageSource()));
     String courseDateText = courseDate.getText().trim();
-    String query = String.format("div:contains(%s)", courseDateText);
+    String courseTitleText = courseTitle.getText().trim();
+    String query = String.format("div:contains(%s):has(div:contains(%s))", courseDateText, courseTitleText);
     Element element = doc.select(query).first();
     return element != null;
   }

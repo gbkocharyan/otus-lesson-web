@@ -10,12 +10,13 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.WebElement;
 import pages.CoursePage;
 import pages.CoursesPage;
 import pages.MainPage;
 
 @ExtendWith(UIExtension.class)
-public class Homework1Test {
+public class HomeworkTest {
 
   SoftAssertions softAssert = new SoftAssertions();
 
@@ -46,17 +47,24 @@ public class Homework1Test {
 
   @Test
   @DisplayName("Find courses with earliest and latest start dates and check that the card of the earliest/latest course"
-      + " displays the correct course start date")
+      + " displays the correct course start date and name")
   public void findCoursesWithEarliestAndLatestStartDates() {
     coursesPage.open();
-    coursesPage.getEarliestCoursesDates().forEach(courseDate ->
-        softAssert.assertThat(coursesPage.isCourseDateInPage(courseDate))
-            .as("Earliest courses dates are present in the page")
-            .isTrue());
-    coursesPage.getLatestCoursesDates().forEach(courseDate ->
-        softAssert.assertThat(coursesPage.isCourseDateInPage(courseDate))
-            .as("Latest courses dates are present in the page")
-            .isTrue());
+    coursesPage.getEarliestCoursesDates().forEach(courseDate -> {
+      WebElement courseTitle = coursesPage.getCourseTitleByDate(courseDate);
+
+      softAssert.assertThat(coursesPage.isCourseDataInPage(courseDate, courseTitle))
+          .as("Earliest courses dates are present in the page")
+          .isTrue();
+    });
+
+    coursesPage.getLatestCoursesDates().forEach(courseDate -> {
+      WebElement courseTitle = coursesPage.getCourseTitleByDate(courseDate);
+
+      softAssert.assertThat(coursesPage.isCourseDataInPage(courseDate, courseTitle))
+          .as("Latest courses dates are present in the page")
+          .isTrue();
+    });
     softAssert.assertAll();
   }
 
