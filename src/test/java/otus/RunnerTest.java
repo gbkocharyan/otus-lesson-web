@@ -9,6 +9,6 @@ import org.junit.platform.suite.api.Suite;
 @Suite
 @IncludeEngines("cucumber")
 @SelectClasspathResource("scenarios")
-@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "main/otus")
+@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "otus")
 public class RunnerTest {
 }
