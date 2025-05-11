@@ -1,11 +1,11 @@
 package otus.steps.pages;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.google.inject.Inject;
 import io.cucumber.java.ru.Тогда;
 import pages.CoursePage;
 import support.GuiceScoped;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CoursePageSteps {
 

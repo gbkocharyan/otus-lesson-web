@@ -3,7 +3,6 @@ package support;
 import factory.WebDriverFactory;
 import io.cucumber.guice.ScenarioScoped;
 import org.openqa.selenium.WebDriver;
-
 import java.util.HashMap;
 import java.util.Map;
 
