@@ -5,15 +5,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import support.GuiceScoped;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Path("/catalog/courses")
@@ -21,8 +20,8 @@ public class CoursesPage extends AbsBasePage {
 
   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM, yyyy", new Locale("ru"));
 
-  public CoursesPage(WebDriver driver) {
-    super(driver);
+  public CoursesPage(GuiceScoped guiceScoped) {
+    super(guiceScoped);
   }
 
   @FindBy(xpath = "//main//section[2]//div[2]//a//h6/div")
@@ -37,17 +36,25 @@ public class CoursesPage extends AbsBasePage {
   @FindBy(xpath = "//section[1]/div[1]/div[2]/div/div/div")
   private List<WebElement> categoryList;
 
+  @FindBy(xpath = "//*[text()='Подготовительные курсы']")
+  private WebElement onboardingCourses;
+
   public String selectRandomCourseTitle() {
     int randomCourseIndex = (int) (Math.random() * coursesTitles.size());
     return getText(coursesTitles.get(randomCourseIndex));
   }
 
   public void clickOnCourseByTitle(String courseTitle) {
-    WebElement webElement = coursePanels.stream()
+    List<WebElement> matchingCourses = coursePanels.stream()
         .filter(course -> course.getText().trim().contains(courseTitle))
-        .findFirst()
-        .orElseThrow(() -> new RuntimeException(courseTitle + " course not found."));
-    click(webElement);
+        .toList();
+
+    if (matchingCourses.isEmpty()) {
+      throw new RuntimeException(courseTitle + " course not found.");
+    }
+
+    WebElement randomCourse = matchingCourses.get(new Random().nextInt(matchingCourses.size()));
+    click(randomCourse);
   }
 
   public List<WebElement> getEarliestCoursesDates() {
@@ -76,6 +83,14 @@ public class CoursesPage extends AbsBasePage {
     LocalDate latestDate = latestDateOpt.get();
     return coursesDates.stream()
         .filter(course -> extractCourseDate(course).equals(latestDate))
+        .collect(Collectors.toList());
+  }
+
+  public List<WebElement> getAllCoursesFromGivenDate(String date) {
+    waiters.waitForElementToBeVisible(coursesDates.getFirst());
+    LocalDate targetDate = LocalDate.parse(date, formatter);
+    return coursesDates.stream()
+        .filter(course -> !extractCourseDate(course).isBefore(targetDate))
         .collect(Collectors.toList());
   }
 
@@ -113,6 +128,37 @@ public class CoursesPage extends AbsBasePage {
 
   public boolean isCategorySelected(WebElement webElement) {
     return getElementAttribute(webElement).equals("true");
+  }
+
+  public void clickInOnboardingCourses() {
+    click(onboardingCourses);
+  }
+
+  public Map<String, String> getAllCoursesNamesAndPrices() {
+    try {
+      Thread.sleep(5000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    this.initPage();
+    Map<String, String> courses = new HashMap<>();
+    for (String href : coursePanels.stream().map(link -> link.getAttribute("href")).toList()) {
+      try {
+        courses.putAll(getCourseDataFromPage(href));
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    return courses;
+  }
+
+  private Map<String, String> getCourseDataFromPage(String href) throws IOException {
+    Map<String, String> courseData = new HashMap<>();
+    Document doc = Jsoup.connect(href).get();
+    String courseTitle = Objects.requireNonNull(doc.select("main h3").first()).text();
+    String coursePrice = Objects.requireNonNull(doc.select("div:matchesOwn(\\d+\\s*₽)").first()).text();
+    courseData.put(courseTitle, coursePrice);
+    return courseData;
   }
 
 }

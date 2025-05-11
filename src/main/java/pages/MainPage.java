@@ -1,12 +1,12 @@
 package pages;
 
 import annotations.Path;
-import org.openqa.selenium.WebDriver;
+import support.GuiceScoped;
 
 @Path("/")
 public class MainPage extends AbsBasePage {
 
-  public MainPage(WebDriver driver) {
-    super(driver);
+  public MainPage(GuiceScoped guiceScoped) {
+    super(guiceScoped);
   }
 }

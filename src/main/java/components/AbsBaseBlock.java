@@ -1,15 +1,17 @@
 package components;
 
 import annotations.Component;
+import com.google.inject.Inject;
 import common.AbsCommon;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import support.GuiceScoped;
 
 public abstract class AbsBaseBlock extends AbsCommon {
 
-  public AbsBaseBlock(WebDriver driver) {
-    super(driver);
+  @Inject
+  public AbsBaseBlock(GuiceScoped guiceScoped) {
+    super(guiceScoped);
   }
 
   public void waitForComponentVisibility() {

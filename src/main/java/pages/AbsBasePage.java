@@ -1,13 +1,15 @@
 package pages;
 
 import annotations.Path;
+import com.google.inject.Inject;
 import common.AbsCommon;
-import org.openqa.selenium.WebDriver;
+import support.GuiceScoped;
 
 public abstract class AbsBasePage extends AbsCommon {
 
-  public AbsBasePage(WebDriver driver) {
-    super(driver);
+  @Inject
+  public AbsBasePage(GuiceScoped guiceScoped) {
+    super(guiceScoped);
   }
 
   private String baseUrl = System.getProperty("baseUrl");

@@ -1,8 +1,10 @@
 package common;
 
+import com.google.inject.Inject;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import support.GuiceScoped;
 import utils.ActionUtils;
 import utils.AnnotationUtils;
 import utils.Waiters;
@@ -13,12 +15,19 @@ public abstract class AbsCommon {
   protected AnnotationUtils annotationUtils;
   protected ActionUtils actionUtils;
   protected Waiters waiters;
+  protected GuiceScoped guiceScoped;
 
-  public AbsCommon(WebDriver driver) {
-    this.driver = driver;
+  @Inject
+  public AbsCommon(GuiceScoped guiceScoped) {
+    this.guiceScoped = new GuiceScoped();
+    this.driver = guiceScoped.driver;
     this.annotationUtils = new AnnotationUtils();
     this.actionUtils = new ActionUtils(driver);
     this.waiters = new Waiters(driver);
+    PageFactory.initElements(driver, this);
+  }
+
+  protected void initPage(){
     PageFactory.initElements(driver, this);
   }
 

@@ -9,13 +9,11 @@ import extensions.UIExtension;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import pages.CoursePage;
 import pages.CoursesPage;
 import pages.MainPage;
-import utils.CoursesValidationHelper;
+import utils.CoursesHelper;
 
-@ExtendWith(UIExtension.class)
 public class HomeworkTest {
 
   SoftAssertions softAssert = new SoftAssertions();
@@ -35,7 +33,7 @@ public class HomeworkTest {
   @Inject
   TrainingComponent trainingComponent;
 
-  CoursesValidationHelper coursesValidationHelper = new CoursesValidationHelper();
+  CoursesHelper coursesHelper = new CoursesHelper();
 
   @Test()
   @DisplayName("Find a course by name in the course catalog page, click on the course tile and check that the correct course page is open")
@@ -50,11 +48,10 @@ public class HomeworkTest {
   @Test
   @DisplayName("Find courses with earliest and latest start dates and check that the card of the earliest/latest course"
       + " displays the correct course start date and name")
-  public void findCoursesWithEarliestAndLatestStartDates() {
+  public void findCoursesWithEarliestAndLatestStartDates(String date) {
     coursesPage.open();
 
-    coursesValidationHelper.validateCourseData(coursesPage, coursesPage.getEarliestCoursesDates(), "Earliest courses dates", softAssert);
-    coursesValidationHelper.validateCourseData(coursesPage, coursesPage.getLatestCoursesDates(), "Latest courses dates", softAssert);
+    coursesHelper.validateAndPrintCourseData(coursesPage, coursesPage.getAllCoursesFromGivenDate(date), "Earliest courses dates", softAssert);
 
     softAssert.assertAll();
   }

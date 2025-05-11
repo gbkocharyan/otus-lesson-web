@@ -1,13 +1,15 @@
 package pages;
 
-import org.openqa.selenium.WebDriver;
+import com.google.inject.Inject;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import support.GuiceScoped;
 
 public class CoursePage extends AbsBasePage {
 
-  public CoursePage(WebDriver driver) {
-    super(driver);
+  @Inject
+  public CoursePage(GuiceScoped guiceScoped) {
+    super(guiceScoped);
   }
 
   @FindBy(xpath = "//main//h1")
