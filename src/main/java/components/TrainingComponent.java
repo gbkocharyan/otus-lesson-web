@@ -10,7 +10,7 @@ import java.util.List;
 public class TrainingComponent extends AbsBaseBlock {
 
   public TrainingComponent(GuiceScoped guiceScoped) {
-    super(guiceScoped);
+    super(guiceScoped.getDriver());
   }
 
   @FindBy(xpath = "//div[3]/div/div/div[1]/div/div/a")

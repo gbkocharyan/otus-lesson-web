@@ -9,7 +9,11 @@ import java.util.Map;
 @ScenarioScoped
 public class GuiceScoped {
 
-  public WebDriver driver = new WebDriverFactory().create();
+  private WebDriver driver = new WebDriverFactory().create();
+
+  public WebDriver getDriver() {
+    return this.driver;
+  }
 
   private final Map<String, Object> storeObject = new HashMap<>();
 

@@ -1,6 +1,7 @@
 package pages;
 
 import annotations.Path;
+import com.google.inject.Inject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,9 +19,11 @@ import java.util.stream.Collectors;
 public class CoursesPage extends AbsBasePage {
 
   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM, yyyy", new Locale("ru"));
+  Random random = new Random();
 
+  @Inject
   public CoursesPage(GuiceScoped guiceScoped) {
-    super(guiceScoped);
+    super(guiceScoped.getDriver());
   }
 
   @FindBy(xpath = "//main//section[2]//div[2]//a//h6/div")
@@ -52,7 +55,7 @@ public class CoursesPage extends AbsBasePage {
       throw new RuntimeException(courseTitle + " course not found.");
     }
 
-    WebElement randomCourse = matchingCourses.get(new Random().nextInt(matchingCourses.size()));
+    WebElement randomCourse = matchingCourses.get(random.nextInt(matchingCourses.size()));
     click(randomCourse);
   }
 
@@ -141,7 +144,9 @@ public class CoursesPage extends AbsBasePage {
     }
     this.initPage();
     Map<String, String> courses = new HashMap<>();
-    for (String href : coursePanels.stream().map(link -> link.getAttribute("href")).toList()) {
+    for (String href : coursePanels.stream()
+        .map(link -> link.getAttribute("href"))
+        .toList()) {
       try {
         courses.putAll(getCourseDataFromPage(href));
       } catch (IOException e) {

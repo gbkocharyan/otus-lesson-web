@@ -9,7 +9,7 @@ import support.GuiceScoped;
 public class HeaderComponent extends AbsBaseBlock {
 
   public HeaderComponent(GuiceScoped guiceScoped) {
-    super(guiceScoped);
+    super(guiceScoped.getDriver());
   }
 
   @FindBy(xpath = "//nav/div[2]/span")

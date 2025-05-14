@@ -13,6 +13,6 @@ public class CommonSteps {
 
   @Дано("Открыт браузер Chrome")
   public void openBrowser() {
-    guiceScoped.driver.get(baseUrl);
+    guiceScoped.getDriver().get(baseUrl);
   }
 }

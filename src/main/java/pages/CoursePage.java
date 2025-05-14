@@ -9,7 +9,7 @@ public class CoursePage extends AbsBasePage {
 
   @Inject
   public CoursePage(GuiceScoped guiceScoped) {
-    super(guiceScoped);
+    super(guiceScoped.getDriver());
   }
 
   @FindBy(xpath = "//main//h1")

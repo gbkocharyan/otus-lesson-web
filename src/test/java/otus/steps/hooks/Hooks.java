@@ -1,4 +1,4 @@
-package otus.hooks;
+package otus.steps.hooks;
 
 import com.google.inject.Inject;
 import io.cucumber.java.After;
@@ -11,8 +11,8 @@ public class Hooks {
 
   @After
   public void afterScenario() {
-    if(guiceScoped.driver != null) {
-      guiceScoped.driver.quit();
+    if(guiceScoped.getDriver() != null) {
+      guiceScoped.getDriver().quit();
     }
   }
 }
