@@ -1,76 +1,123 @@
-# UI Testing Framework
-This project is a UI testing framework built with **Selenium WebDriver**, **JUnit 5**, and **Google Guice** for dependency injection. It includes reusable components and pre-configured modules for efficient and scalable test automation.
+# Otus Lesson Web
+
+A Java-based project for testing web applications, featuring a Selenium-driven test framework integrated with modern testing tools such as JUnit and Cucumber.
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Project Structure](#project-structure)
+- [Technologies and Dependencies](#technologies-and-dependencies)
+- [Installation and Setup](#installation-and-setup)
+- [Running Tests](#running-tests)
+
+---
+
+## Overview
+
+The **Otus Lesson Web** project is a web testing framework built using Java 21. It leverages modern tools such as Selenium WebDriver, JUnit 5, Cucumber, AssertJ, and Guice for efficient and scalable web test automation. The project is designed to support a wide range of web automation and testing use cases.
+
+---
+
 ## Project Structure
-- **extensions/**: Contains test extensions, such as `UIExtension`, for handling setup and teardown logic.
-- **factory/**: Includes `WebDriverFactory`, responsible for managing WebDriver instances.
-- **modules/**: Contains Guice modules (`GuicePagesModule` and `GuiceComponentsModule`) to inject dependencies like page objects and components.
-- **pages/**: Contains page classes such as `MainPage`, `CoursesPage`, and `CoursePage`.
-- **components/**: Includes reusable UI components like `HeaderComponent` and `TrainingComponent`.
 
-## Prerequisites
-- **Java**: JDK 21 or higher is required.
-- **Maven**: Ensure Maven is installed and configured.
-- **Browser Drivers**: Corresponding WebDriver executables (e.g., ChromeDriver) must be accessible in your system's PATH.
-- **Dependencies**: Managed via Maven (defined in `pom.xml`).
+```plaintext
+otus-lesson-web/
+├── src/
+│   ├── main/         # Main application source code (if any)
+│   ├── test/         # Test-related source code
+├── pom.xml           # Maven Project Object Model
+├── target/           # Compiled files and test reports
+└── README.md         # Project documentation
+```
 
-## Getting Started
-### Clone the Repository
-``` bash
- git clone https://github.com/gbkocharyan/otus-lesson-web.git
+The framework primarily focuses on automating web application testing using Selenium and integrating additional utilities for reporting, dependency injection, and assertions.
+
+---
+
+## Technologies and Dependencies
+
+The project is built with the following technologies and dependencies:
+
+### **Programming Language**
+
+- **Java 21**
+
+### **Key Dependencies**
+
+- **Selenium**: Web automation library (`4.31.0`)
+- **JUnit 5**: Testing framework (`5.12.1`)
+- **Cucumber**: Behavior-driven development (`7.2.3`)
+- **Guice**: Dependency injection library (`7.0.0`)
+- **AssertJ**: Fluent assertions library (`3.27.3`)
+- **Guava**: Utility libraries for Java (`32.1.2-jre`)
+- **Jsoup**: HTML parsing (`1.18.3`)
+
+### **Maven Plugins**
+
+- **maven-surefire-plugin** (3.5.3): For executing automated tests.
+- **maven-compiler-plugin** (3.14.0): For compiling Java source code.
+
+---
+
+## Installation and Setup
+
+To set up and run the project:
+
+### **Step 1: Prerequisites**
+Make sure you have the following installed on your system:
+- **Java 21 JDK**
+- **Maven 3.8.x or higher**
+- **Git** (optional for version control)
+
+Ensure `JAVA_HOME` is set appropriately and added to your system's PATH.
+
+### **Step 2: Clone the Repository**
+```bash
+git clone https://github.com/gbkocharyan/otus-lesson-web.git
 cd otus-lesson-web
 ```
-### Install Dependencies
-Run the following Maven command to download and install dependencies:
-``` bash
+
+### **Step 3: Install Dependencies**
+Use Maven to download and install all required dependencies:
+```bash
 mvn clean install
 ```
-## Configuration
-### Browser Configuration
-- The browser type is determined by the `browser` system property.
-- To set the browser (e.g., Chrome), pass the argument when running tests:
-``` bash
--Dbrowser=chrome
+
+---
+
+## Running Tests
+
+### **Execute All Tests**
+Run all tests in the project using the `maven-surefire-plugin`:
+```bash
+mvn test
 ```
 
-Alternatively, you can place the executable in the project directory and provide the path programmatically.
-## How to Run Tests
-### Using Maven
-To execute all tests, run:
-``` bash
-mvn clean test
-```
-To run tests with a specific browser:
-``` bash
-mvn -Dbrowser=chrome clean test
-```
-### Running a Specific Test
-To run a particular test class:
-``` bash
+### **Run Specific Tests (if applicable)**
+To run specific tests, use:
+```bash
 mvn -Dtest=<TestClassName> test
 ```
-### Example
-``` bash
-mvn -Dtest=SampleTest -Dbrowser=chrome test
+
+### **Check Test Reports**
+Test results are available in:
+```plaintext
+target/surefire-reports/
 ```
-## Reporting
-- By default, Maven generates test reports in the following location:
-``` 
-  target/surefire-reports/
-```
-## Key Classes
-### 1. `UIExtension`
-This class sets up the WebDriver and injects the required page objects and components before each test using Guice dependency injection. It also handles cleanup after tests.
-### 2. `WebDriverFactory`
-Manages WebDriver instance creation based on the specified browser type. Currently, it supports:
-- **Chrome**
-- Throws `BrowserNotSupportedException` for unsupported browsers.
 
-### 3. Guice Modules
-- **GuicePagesModule**: Configures page objects for dependency injection.
-- **GuiceComponentsModule**: Configures reusable UI components for dependency injection.
+---
 
-### 4. Page Classes and Components
-- **Page Classes**: Represent specific pages of the application (`MainPage`, `CoursesPage`, etc.).
-- **UI Components**: Reusable building blocks, such as headers or navigation fields (`HeaderComponent`, `TrainingComponent`, etc.).
+## Debugging Common Issues
 
+1. **Error in Forked Process**:  
+   If you experience errors related to the forked process, ensure JDK compatibility (Java 21) and verify your Maven dependencies.  
+   Use:
+   ```bash
+   mvn dependency:tree
+   ```
+   to debug Maven dependency issues.
 
+2. **Test Environment Issues**:  
+   Ensure the test environment, like WebDriver binaries (via WebDriverManager), is set up correctly.
