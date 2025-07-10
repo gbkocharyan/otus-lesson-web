@@ -39,6 +39,10 @@ To execute all tests, run:
 ``` bash
 mvn clean test
 ```
+To run test remotely, run:
+``` bash
+mvn test -Dbrowser=chrome -DremoteIp=45.132.17.22 -DbaseUrl=https://otus.ru
+```
 To run tests with a specific browser:
 ``` bash
 mvn -Dbrowser=chrome clean test
