@@ -9,25 +9,25 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.openqa.selenium.WebDriver;
-import pages.MainPage;
 
 public class UIExtension implements BeforeEachCallback, AfterEachCallback {
 
-  private Injector injector;
+  private static final ThreadLocal<WebDriver> DRIVER = new ThreadLocal<>();
 
   @Override
   public void afterEach(ExtensionContext context) {
-    WebDriver driver = injector.getInstance(WebDriver.class);
-    injector.getInstance(MainPage.class).open();
-    if (driver != null) {
-      driver.quit();
+    WebDriver webDriver = DRIVER.get();
+    if (webDriver != null) {
+      webDriver.quit();
+      DRIVER.remove();
     }
   }
 
   @Override
   public void beforeEach(ExtensionContext context) {
-    WebDriver driver = new WebDriverFactory().create();
-    injector = Guice.createInjector(new GuicePagesModule(driver), new GuiceComponentsModule(driver));
-    context.getTestInstance().ifPresent(injector::injectMembers);
+    WebDriver webDriver = new WebDriverFactory().create();
+    DRIVER.set(webDriver);
+    Injector injector = Guice.createInjector(new GuicePagesModule(webDriver), new GuiceComponentsModule(webDriver));
+    injector.injectMembers(context.getTestInstance().get());
   }
 }
