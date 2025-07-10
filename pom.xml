@@ -91,7 +91,13 @@
                         <browser>chrome</browser>
                         <baseUrl>https://otus.ru</baseUrl>
                         <timeout>20</timeout>
+                        <junit.jupiter.execution.parallel.enabled>true</junit.jupiter.execution.parallel.enabled>
+                        <junit.jupiter.execution.parallel.mode.default>concurrent</junit.jupiter.execution.parallel.mode.default>
+                        <junit.jupiter.execution.parallel.mode.classes.default>concurrent
+                        </junit.jupiter.execution.parallel.mode.classes.default>
                     </systemPropertyVariables>
+                    <parallel>methods</parallel>
+                    <threadCount>${threadCount}</threadCount>
                 </configuration>
             </plugin>
 
