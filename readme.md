@@ -43,38 +43,3 @@ To run test remotely, run:
 ``` bash
 mvn test -Dbrowser=chrome -DremoteIp=45.132.17.22 -DbaseUrl=https://otus.ru
 ```
-To run tests with a specific browser:
-``` bash
-mvn -Dbrowser=chrome clean test
-```
-### Running a Specific Test
-To run a particular test class:
-``` bash
-mvn -Dtest=<TestClassName> test
-```
-### Example
-``` bash
-mvn -Dtest=SampleTest -Dbrowser=chrome test
-```
-## Reporting
-- By default, Maven generates test reports in the following location:
-``` 
-  target/surefire-reports/
-```
-## Key Classes
-### 1. `UIExtension`
-This class sets up the WebDriver and injects the required page objects and components before each test using Guice dependency injection. It also handles cleanup after tests.
-### 2. `WebDriverFactory`
-Manages WebDriver instance creation based on the specified browser type. Currently, it supports:
-- **Chrome**
-- Throws `BrowserNotSupportedException` for unsupported browsers.
-
-### 3. Guice Modules
-- **GuicePagesModule**: Configures page objects for dependency injection.
-- **GuiceComponentsModule**: Configures reusable UI components for dependency injection.
-
-### 4. Page Classes and Components
-- **Page Classes**: Represent specific pages of the application (`MainPage`, `CoursesPage`, etc.).
-- **UI Components**: Reusable building blocks, such as headers or navigation fields (`HeaderComponent`, `TrainingComponent`, etc.).
-
-
