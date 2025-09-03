@@ -20,7 +20,6 @@ public class WebDriverFactory {
   private final String browserName = System.getProperty("browser", "chrome").toLowerCase();
   private final String runMode = System.getProperty("mode", "local").toLowerCase();
   private final String vm = System.getProperty("url", "http://192.168.18.52:4444/wd/hub");
-  private final String video = System.setProperty("java.awt.headless", "false");
 
   private static final ThreadLocal<WebDriver> DRIVER = new ThreadLocal<>();
 
