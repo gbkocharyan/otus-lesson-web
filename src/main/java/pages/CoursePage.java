@@ -1,7 +1,6 @@
 package pages;
 
 import annotations.Path;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Service;
@@ -14,6 +13,8 @@ public class CoursePage extends AbsBasePage {
   private WebElement courseName;
 
   public boolean isCorrectCoursePageOpened(String courseTitle) {
+    initPages();
+    waiters.waitForElementToBeVisible(courseName);
     return getText(courseName).contains(courseTitle);
   }
 }

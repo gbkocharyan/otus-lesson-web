@@ -1,7 +1,6 @@
 package utils;
 
 import org.springframework.stereotype.Component;
-
 import java.lang.annotation.Annotation;
 
 @Component

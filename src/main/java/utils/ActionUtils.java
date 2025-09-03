@@ -1,7 +1,6 @@
 package utils;
 
 import factory.WebDriverFactory;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,7 @@ public class ActionUtils {
   }
 
   public void moveToElement(WebElement element) {
+    ensureInitialized();
     actions.moveToElement(element).build().perform();
   }
 }

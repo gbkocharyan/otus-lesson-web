@@ -5,7 +5,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Service;
@@ -101,6 +100,7 @@ public class CoursesPage extends AbsBasePage {
   }
 
   public WebElement getSelectedCategoryByName(String categoryName) {
+    initPages();
     return categoryList.stream()
         .filter(category -> category.getText().trim().equalsIgnoreCase(categoryName))
         .findFirst()

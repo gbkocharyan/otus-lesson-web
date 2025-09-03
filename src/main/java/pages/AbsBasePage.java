@@ -3,7 +3,6 @@ package pages;
 import annotations.Path;
 import common.AbsCommon;
 import jakarta.annotation.PostConstruct;
-import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import utils.AnnotationUtils;

@@ -4,7 +4,6 @@ import annotations.Component;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -15,6 +14,7 @@ public class TrainingComponent extends AbsBaseBlock {
   private List<WebElement> categoryList;
 
   public String clickOnRandomCategoryAndGetName() {
+    initPages();
     waiters.waitForElementToBeVisible(categoryList.get(0));
     int randomIndex = (int) (Math.random() * categoryList.size());
     String categoryName = getText(categoryList.get(randomIndex)).split(" \\(")[0];

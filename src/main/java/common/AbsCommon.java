@@ -3,12 +3,10 @@ package common;
 import factory.WebDriverFactory;
 import jakarta.annotation.PostConstruct;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import utils.ActionUtils;
-import utils.AnnotationUtils;
 import utils.Waiters;
 
 public abstract class AbsCommon {

@@ -2,7 +2,6 @@ package main;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.google.inject.Inject;
 import components.HeaderComponent;
 import components.TrainingComponent;
 import org.assertj.core.api.SoftAssertions;
@@ -27,8 +26,8 @@ public class HomeworkTest extends TestBase {
   private HeaderComponent headerComponent;
   @Autowired
   private TrainingComponent trainingComponent;
-
-  CoursesValidationHelper coursesValidationHelper = new CoursesValidationHelper();
+  @Autowired
+  private CoursesValidationHelper coursesValidationHelper;
 
   @Test(description = "Find a course by name in the course catalog page, click on the course tile and check that the correct course page is open")
   public void shouldOpenCorrectCoursePage() {

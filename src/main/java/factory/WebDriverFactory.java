@@ -2,10 +2,11 @@ package factory;
 
 import exceptions.BrowserNotSupportedException;
 import factory.settings.ChromeSettings;
+import factory.settings.FirefoxSettings;
 import listeners.MouseListener;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.EventFiringDecorator;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,10 @@ import java.net.URL;
 public class WebDriverFactory {
 
   private final String browserName = System.getProperty("browser", "chrome").toLowerCase();
-  private final String remoteIp = System.getProperty("remoteIp");
+  private final String runMode = System.getProperty("mode", "local").toLowerCase();
+  private final String vm = System.getProperty("url", "http://192.168.18.52:4444/wd/hub");
+  private final String video = System.setProperty("java.awt.headless", "false");
+
   private static final ThreadLocal<WebDriver> DRIVER = new ThreadLocal<>();
 
   public synchronized WebDriver getDriver() {
@@ -25,28 +29,37 @@ public class WebDriverFactory {
   }
 
   public synchronized WebDriver create(ITestContext context) {
-    WebDriver driver = null;
-
+    WebDriver driver;
     switch (browserName) {
-      case "chrome":
-        ChromeOptions options = new ChromeSettings().settings();
-        try {
-          if (remoteIp != null && !remoteIp.isEmpty()) {
-            // Remote WebDriver (for Selenoid)
-            String remoteUrl = "http://" + remoteIp + "/wd/hub";
-            driver = new RemoteWebDriver(new URL(remoteUrl), options);
-          } else {
-            // Local WebDriver
-            driver = new ChromeDriver(options);
+      case "chrome" -> {
+        if ("remote".equals(runMode)) {
+          try {
+            driver = new RemoteWebDriver(new URL(vm),
+                new ChromeSettings().settings(context.getName()));
+          } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
           }
-        } catch (MalformedURLException e) {
-          throw new RuntimeException("Invalid Selenoid URL", e);
+        } else {
+          driver = new ChromeDriver(new ChromeSettings().settings(context.getName()));
         }
-        break;
-      default:
-        throw new BrowserNotSupportedException(browserName);
+      }
+      case "firefox" -> {
+        if ("remote".equals(runMode)) {
+          try {
+            driver = new RemoteWebDriver(new URL(vm), new FirefoxSettings().settings());
+          } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+          }
+        } else {
+          driver = new FirefoxDriver(new FirefoxSettings().settings());
+        }
+      }
+      default -> throw new BrowserNotSupportedException(browserName);
     }
-    return new EventFiringDecorator<>(new MouseListener()).decorate(driver);
+
+    WebDriver decoratedDriver = new EventFiringDecorator<>(new MouseListener()).decorate(driver);
+    DRIVER.set(decoratedDriver);
+    return decoratedDriver;
   }
 
   public void killDriver() {
