@@ -2,27 +2,38 @@ package pages;
 
 import annotations.Path;
 import common.AbsCommon;
+import jakarta.annotation.PostConstruct;
 import org.openqa.selenium.WebDriver;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import utils.AnnotationUtils;
 
 public abstract class AbsBasePage extends AbsCommon {
 
-  public AbsBasePage(WebDriver driver) {
-    super(driver);
+  @Value("${baseUrl:https://otus.ru}")
+  private String baseUrl;
+
+  @Autowired
+  private AnnotationUtils annotationUtils;
+
+  private String pagePath;
+
+  @PostConstruct
+  public void postConstructor() {
+    initPages();
+    initializePath();
   }
 
-  private String baseUrl = System.getProperty("baseUrl");
-
-  private String getPath() {
-    return annotationUtils.getAnnotationInstance(this.getClass(), Path.class).value();
+  private void initializePath() {
+    pagePath = annotationUtils.getAnnotationInstance(this.getClass(), Path.class).value();
   }
 
-  public String getUrl() {
-    baseUrl = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.lastIndexOf("/")) : baseUrl;
-    return baseUrl + getPath();
-  }
-
-  public void open() {
-    driver.get(getUrl());
+  public void openPage() {
+    webDriverFactory.getDriver().get(baseUrl + pagePath);
+    addCookie();
+    webDriverFactory.getDriver().navigate().refresh();
+    waiters.waitForPageLoad();
+    initPages();
   }
 
 }

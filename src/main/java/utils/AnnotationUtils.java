@@ -1,7 +1,10 @@
 package utils;
 
+import org.springframework.stereotype.Component;
+
 import java.lang.annotation.Annotation;
 
+@Component
 public class AnnotationUtils {
 
   public <T extends Annotation> T getAnnotationInstance(Class<?> targetClass, Class<T> annotationClass) {

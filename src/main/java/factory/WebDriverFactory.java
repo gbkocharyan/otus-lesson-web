@@ -8,15 +8,23 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.EventFiringDecorator;
+import org.springframework.stereotype.Component;
+import org.testng.ITestContext;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+@Component
 public class WebDriverFactory {
 
-  private final String browserName = System.getProperty("browser");
+  private final String browserName = System.getProperty("browser", "chrome").toLowerCase();
   private final String remoteIp = System.getProperty("remoteIp");
+  private static final ThreadLocal<WebDriver> DRIVER = new ThreadLocal<>();
 
-  public WebDriver create() {
+  public synchronized WebDriver getDriver() {
+    return DRIVER.get();
+  }
+
+  public synchronized WebDriver create(ITestContext context) {
     WebDriver driver = null;
 
     switch (browserName) {
@@ -40,4 +48,18 @@ public class WebDriverFactory {
     }
     return new EventFiringDecorator<>(new MouseListener()).decorate(driver);
   }
+
+  public void killDriver() {
+    WebDriver driver = DRIVER.get();
+    if (driver != null) {
+      try {
+        DRIVER.remove();
+        driver.close();
+        driver.quit();
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    }
+  }
+
 }

@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -16,14 +17,11 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Service
 @Path("/catalog/courses")
 public class CoursesPage extends AbsBasePage {
 
   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM, yyyy", new Locale("ru"));
-
-  public CoursesPage(WebDriver driver) {
-    super(driver);
-  }
 
   @FindBy(xpath = "//main//section[2]//div[2]//a//h6/div")
   private List<WebElement> coursesTitles;
@@ -51,7 +49,7 @@ public class CoursesPage extends AbsBasePage {
   }
 
   public List<WebElement> getEarliestCoursesDates() {
-    waiters.waitForElementToBeVisible(coursesDates.getFirst());
+    waiters.waitForElementToBeVisible(coursesDates.get(0));
     Optional<LocalDate> earliestDateOpt = coursesDates.stream()
         .map(this::extractCourseDate)
         .reduce((date1, date2) -> date1.isBefore(date2) ? date1 : date2);
@@ -65,7 +63,7 @@ public class CoursesPage extends AbsBasePage {
   }
 
   public List<WebElement> getLatestCoursesDates() {
-    waiters.waitForElementToBeVisible(coursesDates.getFirst());
+    waiters.waitForElementToBeVisible(coursesDates.get(0));
     Optional<LocalDate> latestDateOpt = coursesDates.stream()
         .map(this::extractCourseDate)
         .reduce(
@@ -96,11 +94,9 @@ public class CoursesPage extends AbsBasePage {
 
 
   public boolean isCourseDataInPage(WebElement courseDate, WebElement courseTitle) {
-    Document doc = Jsoup.parse(Objects.requireNonNull(driver.getPageSource()));
-    String courseDateText = courseDate.getText().trim();
-    String courseTitleText = courseTitle.getText().trim();
-    String query = String.format("div:contains(%s):has(div:contains(%s))", courseDateText, courseTitleText);
-    Element element = doc.select(query).first();
+    Document doc = Jsoup.parse(Objects.requireNonNull(webDriverFactory.getDriver().getPageSource()));
+    String courseDateText = getText(courseDate).trim();
+    Element element = doc.select(String.format("div:contains(%s)", courseDateText)).first();
     return element != null;
   }
 

@@ -1,32 +1,33 @@
 package main;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import factory.WebDriverFactory;
-import modules.GuiceComponentsModule;
-import modules.GuicePagesModule;
 import org.openqa.selenium.WebDriver;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.ITestContext;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-public class TestBase {
+@SpringBootTest(classes = Application.class)
+public class TestBase extends AbstractTestNGSpringContextTests {
 
   private static final ThreadLocal<WebDriver> DRIVER = new ThreadLocal<>();
 
-  @AfterMethod
-  public void afterEach() {
-    WebDriver webDriver = DRIVER.get();
-    if (webDriver != null) {
-      webDriver.quit();
-      DRIVER.remove();
-    }
-  }
+  @Autowired
+  private WebDriverFactory webDriverFactory;
 
   @BeforeMethod
-  public void beforeEach() {
-    WebDriver webDriver = new WebDriverFactory().create();
-    DRIVER.set(webDriver);
-    Injector injector = Guice.createInjector(new GuicePagesModule(webDriver), new GuiceComponentsModule(webDriver));
-    injector.injectMembers(this);
+  public void setUp(ITestContext context) throws Exception {
+    webDriverFactory.create(context);
+  }
+
+  @AfterMethod
+  public void tearDown() {
+    try {
+      webDriverFactory.killDriver();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }

@@ -1,14 +1,14 @@
 package pages;
 
+import annotations.Path;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.springframework.stereotype.Service;
 
+@Service
+@Path("/")
 public class CoursePage extends AbsBasePage {
-
-  public CoursePage(WebDriver driver) {
-    super(driver);
-  }
 
   @FindBy(xpath = "//main//h1")
   private WebElement courseName;

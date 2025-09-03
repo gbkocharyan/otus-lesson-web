@@ -1,25 +1,30 @@
 package common;
 
+import factory.WebDriverFactory;
+import jakarta.annotation.PostConstruct;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import utils.ActionUtils;
 import utils.AnnotationUtils;
 import utils.Waiters;
 
 public abstract class AbsCommon {
 
-  protected WebDriver driver;
-  protected AnnotationUtils annotationUtils;
-  protected ActionUtils actionUtils;
+  @Autowired
+  protected WebDriverFactory webDriverFactory;
+
+  @Autowired
   protected Waiters waiters;
 
-  public AbsCommon(WebDriver driver) {
-    this.driver = driver;
-    this.annotationUtils = new AnnotationUtils();
-    this.actionUtils = new ActionUtils(driver);
-    this.waiters = new Waiters(driver);
-    PageFactory.initElements(driver, this);
+  @Autowired
+  protected ActionUtils actionUtils;
+
+  @PostConstruct
+  public void initPages() {
+    PageFactory.initElements(webDriverFactory.getDriver(), this);
   }
 
   protected void click(WebElement element) {
@@ -34,6 +39,11 @@ public abstract class AbsCommon {
 
   protected String getElementAttribute(WebElement element) {
     return element.getDomAttribute("value");
+  }
+
+  public void addCookie() {
+    JavascriptExecutor js = (JavascriptExecutor) webDriverFactory.getDriver();
+    js.executeScript("localStorage.setItem('cookieAccess', 'true');");
   }
 
 }

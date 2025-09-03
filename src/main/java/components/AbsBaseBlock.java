@@ -2,42 +2,38 @@ package components;
 
 import annotations.Component;
 import common.AbsCommon;
+import jakarta.annotation.PostConstruct;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.annotation.Autowired;
+import utils.AnnotationUtils;
 
 public abstract class AbsBaseBlock extends AbsCommon {
 
-  public AbsBaseBlock(WebDriver driver) {
-    super(driver);
+  @Autowired
+  private AnnotationUtils annotationUtils;
+
+  private By componentSelector;
+
+  @PostConstruct
+  public void initComponents() {
+    initPages();
+    initializeSelector();
   }
 
-  public void waitForComponentVisibility() {
-    try {
-      waiters.waitForElementToBeVisible(findComponentElement());
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to wait for the component to be visible: " + e.getMessage(), e);
-    }
+  public void verifyComponentLoaded() {
+    initializeSelector();
+    waiters.waitForElementToBeVisible(componentSelector);
   }
 
-  private WebElement findComponentElement() {
-    By locator = fetchComponentLocator();
-    return driver.findElement(locator);
-  }
+  private void initializeSelector() {
+    String[] selector = annotationUtils.getAnnotationInstance(this.getClass(), Component.class)
+        .value()
+        .split(":");
 
-  private By fetchComponentLocator() {
-    String componentLocator = annotationUtils
-        .getAnnotationInstance(this.getClass(), Component.class)
-        .value();
-    String[] locatorParts = componentLocator.split(":");
-    String locatorType = locatorParts[0];
-    String locatorValue = locatorParts[1];
-    return switch (locatorType) {
-      case "css" -> By.cssSelector(locatorValue);
-      case "xpath" -> By.xpath(locatorValue);
-      case "id" -> By.id(locatorValue);
-      default -> throw new IllegalArgumentException("Unsupported locator type: " + locatorType);
+    componentSelector = switch (selector[0].trim()) {
+      case "css" -> By.cssSelector(selector[1].trim());
+      case "xpath" -> By.xpath(selector[1].trim());
+      default -> throw new IllegalArgumentException("Unsupported selector type: " + selector[0]);
     };
   }
-
 }
