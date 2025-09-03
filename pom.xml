@@ -30,10 +30,18 @@
         <maven.surefire.version>3.5.3</maven.surefire.version>
         <maven.checkstyle.version>3.6.0</maven.checkstyle.version>
         <maven.spotbugs.version>4.9.3.0</maven.spotbugs.version>
+        <allure.version>2.23.0</allure.version>
         <threadCount>3</threadCount>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-testng</artifactId>
+            <version>${allure.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
