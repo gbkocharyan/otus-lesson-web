@@ -45,16 +45,16 @@ node('maven_gev') {
             sh "mkdir -p ${WORKSPACE}/allure-results ${WORKSPACE}/allure-report"
 
             sh """
-                docker run --name web_ui \
+                docker run --name web \
                     -v ${WORKSPACE}/allure-results:/app/allure-results \
                     -v ${WORKSPACE}/allure-report:/app/allure-report \
-                    localhost:5005/web_gev || true
+                    localhost:5005/web_ui || true
             """
 
             // Copy results from container
-            sh "docker cp web_ui:/app/allure-results ${WORKSPACE}/ || true"
+            sh "docker cp web:/app/allure-results ${WORKSPACE}/ || true"
             archiveArtifacts artifacts: 'allure-results/**', fingerprint: true
-            sh "docker rm -f web_ui || true"
+            sh "docker rm -f web || true"
         }
 
     } finally {
