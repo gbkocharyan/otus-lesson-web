@@ -21,7 +21,6 @@
 
         <selenium.version>4.31.0</selenium.version>
         <webdrivermanager.version>6.0.1</webdrivermanager.version>
-        <junit.version>5.12.1</junit.version>
         <guice.version>7.0.0</guice.version>
         <guava.version>32.1.2-jre</guava.version>
         <assertj.version>3.27.3</assertj.version>
@@ -63,19 +62,6 @@
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>${webdrivermanager.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
