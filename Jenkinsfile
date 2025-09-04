@@ -48,7 +48,7 @@ node('maven_gev') {
                 docker run --name web \
                     -v ${WORKSPACE}/allure-results:/app/allure-results \
                     -v ${WORKSPACE}/allure-report:/app/allure-report \
-                    localhost:5005/ui_tests:latest || true
+                    localhost:5005/web_gev || true
             """
 
             // Copy results from container
