@@ -42,8 +42,6 @@ node('maven_gev') {
         }
 
         stage('Run Web Tests') {
-            // clean old allure results to avoid mixing suites
-            sh "rm -rf ${WORKSPACE}/allure-results/* ${WORKSPACE}/allure-report/* || true"
             sh "mkdir -p ${WORKSPACE}/allure-results ${WORKSPACE}/allure-report"
 
             sh """

@@ -32,7 +32,8 @@ RUN curl -L -o /tmp/allure.zip https://github.com/allure-framework/allure2/relea
 RUN mkdir -p /app/allure-results /app/allure-report
 
 # Default command: run tests and generate Allure report
-CMD mvn clean test \
+CMD rm -rf /app/allure-results/* /app/allure-report/* \
+        && mvn clean test \
       -Dbrowser=${BROWSER} \
       -DbaseUrl=${BASE_URL} \
       -Dmode=${MODE} \
