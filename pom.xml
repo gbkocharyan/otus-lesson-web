@@ -21,7 +21,6 @@
 
         <selenium.version>4.31.0</selenium.version>
         <webdrivermanager.version>6.0.1</webdrivermanager.version>
-        <guice.version>7.0.0</guice.version>
         <guava.version>32.1.2-jre</guava.version>
         <assertj.version>3.27.3</assertj.version>
         <jsoup.version>1.18.3</jsoup.version>
@@ -62,12 +61,6 @@
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>${webdrivermanager.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
-            <version>${guice.version}</version>
         </dependency>
 
         <dependency>
@@ -185,8 +178,8 @@
                 <artifactId>allure-maven</artifactId>
                 <version>2.8</version>
                 <configuration>
-                    <resultsDirectory>/app/allure-results</resultsDirectory>
-                    <reportDirectory>/app/allure-report</reportDirectory>
+                    <resultsDirectory>allure-results</resultsDirectory>
+                    <reportDirectory>allure-report</reportDirectory>
                 </configuration>
             </plugin>
         </plugins>
