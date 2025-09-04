@@ -42,8 +42,12 @@ node('maven_gev') {
         }
 
         stage('Run Web Tests') {
-            sh "rm -rf ${WORKSPACE}/allure-results ${WORKSPACE}/allure-report"
-            sh "mkdir -p ${WORKSPACE}/allure-results ${WORKSPACE}/allure-report"
+            // Stop any running container first
+                sh "docker rm -f web || true"
+                // Remove previous results
+                sh "rm -rf ${WORKSPACE}/allure-results ${WORKSPACE}/allure-report"
+                // Recreate directories
+                sh "mkdir -p ${WORKSPACE}/allure-results ${WORKSPACE}/allure-report"
 
             sh """
                 docker run --name web \
