@@ -42,24 +42,19 @@ node('maven_gev') {
         }
 
         stage('Run Web Tests') {
-            // Stop any running container first
-                sh "docker rm -f web || true"
-                // Remove previous results
-                sh "rm -rf ${WORKSPACE}/allure-results ${WORKSPACE}/allure-report"
-                // Recreate directories
-                sh "mkdir -p ${WORKSPACE}/allure-results ${WORKSPACE}/allure-report"
+            sh "mkdir -p ${WORKSPACE}/allure-results ${WORKSPACE}/allure-report"
 
             sh """
-                docker run --name web \
+                docker run --name web_tests \
                     -v ${WORKSPACE}/allure-results:/app/allure-results \
                     -v ${WORKSPACE}/allure-report:/app/allure-report \
-                    localhost:5005/web_ui || true
+                    localhost:5005/web || true
             """
 
             // Copy results from container
-            sh "docker cp web:/app/allure-results ${WORKSPACE}/ || true"
+            sh "docker cp web_tests:/app/allure-results ${WORKSPACE}/ || true"
             archiveArtifacts artifacts: 'allure-results/**', fingerprint: true
-            sh "docker rm -f web || true"
+            sh "docker rm -f web_tests || true"
         }
 
     } finally {
